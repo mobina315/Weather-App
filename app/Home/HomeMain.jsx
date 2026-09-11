@@ -20,6 +20,7 @@ export default function HomeMain() {
         .then((data) => {
             setWeatherData(data);
          });
+         
     }, [selectedCity]);
    const persianDate = weatherData ? new Date(weatherData.current.time).toLocaleDateString("fa-IR", { day: "numeric", month: "long", })
     : "";
@@ -34,7 +35,12 @@ export default function HomeMain() {
 
                         <div  className="flex flex-col gap-[24px] items-center">
 
-                            <WeatherCard className="" tital="دما" value={`${weatherData?.current?.temperature_2m}°`}/>
+                            <WeatherCard 
+                            className="" tital="دما" 
+                            value={`${weatherData?.current?.temperature_2m}°`}
+                            weatherCode={weatherData?.current?.weather_code} 
+                            isDay={weatherData?.current?.is_day}
+                            />
                         <p className="text-slate-500 text-[15px] font-[400] tracking-[0%] ">
                         <span>{selectedCity}</span>
                         <span>{persianDate}</span>
