@@ -7,21 +7,41 @@ import { DayWwacherCard } from "../Component/DayWeatherCard";
 
 
 export default function HomeMain() {
-    const [selectedCity, setSelectedCity] = useState("تهران");
+    const [selectedCity, setSelectedCity] = useState("");
     const [weatherData, setWeatherData] = useState(null);
-    
+    const [location,setLocation]=useState(null);
+
    const cityData = cities.find((city) => city.name === selectedCity);
+   useEffect(()=>{
+    navigator.geolocation.getCurrentPosition((position)=>{
+        const latitude=position.coords.latitude;
+        const longitude =position.coords.longitude;
+
+        setLocation({
+            latitude,
+            longitude,
+        });
+    },
+    (error) => {
+  console.log(error);
+}
+);
+   },[]);
 
     useEffect(() => {
-        if (!cityData) return;
-      const url = `https://api.open-meteo.com/v1/forecast?latitude=${cityData.latitude}&longitude=${cityData.longitude}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code,is_day&daily=temperature_2m_max,temperature_2m_min,weather_code&forecast_days=6&timezone=auto`;
+        const latitude = cityData?.latitude ?? location?.latitude;
+        const longitude = cityData?.longitude ?? location?.longitude;
+
+
+        if (latitude == null || longitude == null) return;
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code,is_day&daily=temperature_2m_max,temperature_2m_min,weather_code&forecast_days=6&timezone=auto`;
         fetch(url)
         .then((response) => response.json())
         .then((data) => {
             setWeatherData(data);
          });
          
-    }, [selectedCity]);
+    }, [selectedCity,location]);
    const persianDate = weatherData ? new Date(weatherData.current.time).toLocaleDateString("fa-IR", { day: "numeric", month: "long", })
     : "";
 

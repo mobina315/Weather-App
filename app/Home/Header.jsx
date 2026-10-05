@@ -12,7 +12,7 @@ export default function Header({ selectedCity, setSelectedCity }) {
                     
 
                     <select id="city"value={selectedCity}  onChange={(e) => setSelectedCity(e.target.value)} dir="rtl" className=" rounded-[12px] border-[0px] border-slate-200">
-                        <option value="default"className="text-[#b3b3b3]"disabled>انتخاب شهر</option>
+                        <option value="default"className="text-[#b3b3b3]">انتخاب شهر</option>
                         {cities.map((city) => ( <option key={city.name} value={city.name}className="text-black ">
                                {city.name}
                            </option>))}
